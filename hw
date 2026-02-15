@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For My Love 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    height:100vh;
+    background:linear-gradient(135deg,#ffd6e0,#ffc2d1,#ff8fab);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+.card{
+    width:350px;
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 40px rgba(0,0,0,0.1);
+    animation:fade 0.6s ease;
+}
+h1{
+    font-family:'Dancing Script',cursive;
+    color:#c9184a;
+    margin-bottom:15px;
+}
+p{font-size:14px;color:#555;margin-bottom:15px;}
+button{
+    padding:10px 25px;
+    border:none;
+    border-radius:25px;
+    margin:8px;
+    cursor:pointer;
+    font-weight:500;
+    transition:0.3s;
+}
+.yes{background:#ff4d6d;color:white;}
+.no{background:#eee;color:#c9184a;}
+.yes:hover{transform:scale(1.1);}
+.no:hover{transform:scale(1.1);}
+img.gallery{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:15px;
+    margin:5px;
+}
+.heart{
+    position:fixed;
+    bottom:-10px;
+    font-size:20px;
+    animation:float 6s linear infinite;
+}
+@keyframes float{
+    0%{transform:translateY(0);opacity:1;}
+    100%{transform:translateY(-100vh);opacity:0;}
+}
+@keyframes fade{
+    from{opacity:0;transform:scale(0.9);}
+    to{opacity:1;transform:scale(1);}
+}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<audio autoplay loop>
+<source src="abt.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+document.addEventListener("click", function(){
+  const music = document.getElementById("bgm");
+  music.play();
+}, { once: true });
+</script>
+
+<script>
+const app=document.getElementById("app");
+
+function hearts(){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💖";
+    h.style.left=Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+}
+setInterval(hearts,400);
+
+/* HALAMAN 1 */
+function page1(){
+app.innerHTML=`
+<div class="card">
+<h1>Will you be my Valentine?</h1>
+<p>Please say yes 🥺</p>
+<button class="yes" onclick="page2()">YES</button>
+<button class="no" id="noBtn" onclick="noDrama()">NO</button>
+<p id="drama"></p>
+</div>`;
+}
+
+function noDrama(){
+document.getElementById("drama").innerHTML=
+"eits gak bisa bleeee, gw apus tombol NO nya awikwok";
+document.getElementById("noBtn").style.display="none";
+}
+
+/* HALAMAN 2 */
+function page2(){
+app.innerHTML=`
+<div class="card">
+<h1>My Beautiful You 💕</h1>
+<p>Sejak kamu hadir, semuanya jadi lebih indah ✨</p>
+<div>
+<img src="https://cdn.discordapp.com/attachments/1468557593411715126/1472462218628038666/Config_by_AndroGcam_24_Jan_14_14.lmc_8.4.jpg?ex=6992a8cd&is=6991574d&hm=a1e1a8ff97424652c0c333649da4696d271db7a71e8cfbb9c13c04e138a30730&" class="gallery">
+<img src="https://cdn.discordapp.com/attachments/1468557593411715126/1472462217688383549/Snapchat-14507511.jpg?ex=6992a8cd&is=6991574d&hm=18baf790ec2bcf69d44dda779613899359270ffc39a24cb5ac19067be8ed6f91&" class="gallery"><br>
+<img src="https://cdn.discordapp.com/attachments/1468557593411715126/1472462217373941813/Screenshot_20260212_191703_Instagram.jpg?ex=6992a8cd&is=6991574d&hm=8c51099a7deab816bd9bd87233cf832a63af1ed74eb4ec4101549c366866da77&" class="gallery">
+<img src="https://cdn.discordapp.com/attachments/1468557593411715126/1472462218120663181/Config_by_AndroGcam_28_Jan_06_25.lmc_8.4_2.jpg?ex=6992a8cd&is=6991574d&hm=6127b76933552e60773919a20a1a1c82893a89cc598536e6555c4ce1f252728f&" class="gallery">
+</div>
+<button class="yes" onclick="page3()">Satu halaman lagi...</button>
+</div>`;
+}
+
+/* HALAMAN 3 */
+function page3(){
+app.innerHTML=`
+<div class="card">
+<h1>Ini kado spesial buat kamu 🎁</h1>
+<img src="https://cdn.discordapp.com/attachments/1468557593411715126/1472463900518907996/OBVBUN1422_Classic-Midnight-Hand-Bouquet---Fiery-Red-large_350x.jpg?ex=6992aa5e&is=699158de&hm=aa6822247ba52c226b52ff9c90daffe499a889e6887fcac9bc2fe77db40d8bb7&" style="width:200px;border-radius:15px;margin:15px 0;">
+<button class="yes" onclick="page4()">Terima hadiahnya</button>
+</div>`;
+}
+
+/* HALAMAN 4 */
+function page4(){
+app.innerHTML=`
+<div class="card">
+<h1>Happy Valentine 💖</h1>
+<p>Makasih ya udah jadi alasan aku senyum setiap hari.
+Aku selalu ada buat kamu.
+Semoga kita selalu bareng selamanya 🥺💕</p>
+<button class="yes" onclick="page1()">Restart</button>
+</div>`;
+}
+
+page1();
+</script>
+
+</body>
+</html>
