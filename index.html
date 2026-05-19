@@ -1,39 +1,2437 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <!-- Tarok di <head> atau sebelum </body> -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KyoUto - Web Developer</title>
-    
-    <!-- Font Awesome Icons (v6) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Google Fonts (Poppins) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Azure | Nynz Storage</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23050508' width='100' height='100' rx='20'/%3E%3Ctext x='50' y='65' font-family='system-ui, sans-serif' font-size='45' font-weight='800' fill='%238b5cf6' text-anchor='middle'%3EA%3C/text%3E%3Ctext x='72' y='65' font-family='system-ui, sans-serif' font-size='35' font-weight='300' fill='%23ffffff' text-anchor='middle' opacity='0.9'%3E%7C%3C/text%3E%3Ctext x='88' y='65' font-family='system-ui, sans-serif' font-size='45' font-weight='800' fill='%23c4b5fd' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-primary: #050508;
+            --bg-secondary: #0a0a0f;
+            --bg-tertiary: #12121a;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #8b5cf6;
+            --accent-light: #a78bfa;
+            --accent-dark: #7c3aed;
+            --border: rgba(255,255,255,0.08);
+            --glass-bg: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --sidebar-width: 240px;
+            --bottom-nav-height: 64px;
         }
-
+        [data-theme="monochrome"] {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #141414;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #ffffff;
+            --accent-light: #e0e0e0;
+            --accent-dark: #999999;
+            --border: rgba(255,255,255,0.15);
+            --glass-bg: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.12);
+            --shadow: 0 8px 32px rgba(0,0,0,0.8);
+        }
+        [data-theme="light"] {
+            --bg-primary: #f2f2f7;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e5e5ea;
+            --text-primary: #1c1c1e;
+            --text-secondary: #48484a;
+            --text-muted: #8e8e93;
+            --accent: #007aff;
+            --accent-light: #5ac8fa;
+            --accent-dark: #0051d5;
+            --border: rgba(0,0,0,0.06);
+            --glass-bg: rgba(255,255,255,0.7);
+            --glass-border: rgba(0,0,0,0.08);
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        [data-theme="feminine"] {
+            --bg-primary: #1a0b14;
+            --bg-secondary: #2d1525;
+            --bg-tertiary: #3d1e33;
+            --text-primary: #ffe4f0;
+            --text-secondary: #d4a5c4;
+            --text-muted: #9e6b8a;
+            --accent: #ff69b4;
+            --accent-light: #ffb6d5;
+            --accent-dark: #d1478c;
+            --border: rgba(255,105,180,0.15);
+            --glass-bg: rgba(255,105,180,0.08);
+            --glass-border: rgba(255,105,180,0.2);
+            --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            height: 100%;
+            overflow-x: hidden;
+        }
         body {
-            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
-            /* BACKGROUND ANIMASI GRADIEN */
-            background: linear-gradient(-45deg, black, grey, black, grey);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: var(--bg-primary);
+            transition: var(--transition);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-100%); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-fadeInUp { animation: fadeInUp 0.5s ease-out forwards; }
+        .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        .animate-slideDown { animation: slideDown 0.4s ease-out forwards; }
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+        .glass:hover {
+            border-color: var(--border);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+        }
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-md);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--accent);
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn:active { transform: translateY(0); }
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            box-shadow: none;
+        }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-lg { padding: 14px 28px; font-size: 16px; }
+        .btn-block { width: 100%; }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+        .form-input::placeholder { color: var(--text-muted); }
+        select.form-input {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a1a1aa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+        #authModal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        .auth-brand { text-align: center; margin-bottom: 32px; }
+        .auth-brand h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: var(--text-primary);
+        }
+        .auth-brand .subtitle {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--bg-tertiary);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .auth-tab.active {
+            background: var(--accent);
+            color: #ffffff;
+        }
+        .auth-form { display: none; }
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        #appContainer {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        #appContainer.active { display: flex; }
+        .warning-banner {
+            background: rgba(234, 179, 8, 0.1);
+            border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #eab308;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .warning-banner svg { flex-shrink: 0; }
+        .storage-meter {
+            padding: 12px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .storage-meter-bar {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .storage-meter-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease, background-color 0.3s ease;
+            background: #22c55e;
+        }
+        .storage-meter-fill.warning { background: #eab308; }
+        .storage-meter-fill.danger { background: #ef4444; }
+        .storage-meter-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .app-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .sidebar-brand {
+            padding: 0 20px 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .sidebar-brand h2 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+        .sidebar-brand .subtitle {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .sidebar-nav {
+            flex: 1;
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .nav-item:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+        .nav-item.active {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+        .nav-item svg {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+        }
+        .sidebar-footer {
+            padding: 16px 20px 0;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            flex-shrink: 0;
+        }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-role {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: capitalize;
+        }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: var(--bg-primary);
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--bottom-nav-height);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            z-index: 100;
+            padding: 0 16px;
+        }
+        .bottom-nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            height: 100%;
+        }
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 8px 12px;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background: transparent;
+            font-family: inherit;
+        }
+        .bottom-nav-item.active { color: var(--accent); }
+        .bottom-nav-item svg { width: 24px; height: 24px; }
+        .vault-selector { margin-bottom: 20px; }
+        .vault-selector select { min-width: 200px; }
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 16px;
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+        .masonry-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: var(--accent);
+        }
+        .masonry-item img, .masonry-item video {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .masonry-item .file-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 12px;
+        }
+        .masonry-item:hover .file-overlay { opacity: 1; }
+        .file-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .file-meta {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 2px;
+        }
+        .file-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .file-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(4px);
+        }
+        .file-action-btn:hover { background: var(--accent); }
+        .audio-thumbnail {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+            font-size: 48px;
+        }
+        @media (min-width: 768px) { .masonry-grid { column-count: 3; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 4; } }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            font-size: 14px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-xl);
+            padding: 60px 20px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            background: var(--bg-secondary);
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--accent);
+            background: var(--glass-bg);
+        }
+        .upload-zone-icon { font-size: 48px; margin-bottom: 16px; }
+        .upload-zone h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .upload-zone p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .upload-input { display: none; }
+        .upload-progress { margin-top: 24px; }
+        .upload-progress-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+        .upload-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--bg-primary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .upload-progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .plan-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .plan-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        .plan-card.featured {
+            border-color: var(--accent);
+            animation: pulse-glow 3s infinite;
+        }
+        .plan-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .plan-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .plan-price {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        .plan-price span { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .plan-features {
+            list-style: none;
+            flex: 1;
+            margin-bottom: 20px;
+        }
+        .plan-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .plan-features li::before {
+            content: "✓";
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .plan-features li.disabled {
+            opacity: 0.4;
+            text-decoration: line-through;
+        }
+        .plan-features li.disabled::before {
+            content: "✕";
+            color: var(--text-muted);
+        }
+        .settings-section {
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+        .settings-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .theme-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .theme-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--border);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .theme-chip:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+        .theme-chip.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+        }
+        .theme-preview {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header h3 { font-size: 18px; font-weight: 700; }
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 18px;
+        }
+        .modal-close:hover {
+            background: var(--accent);
+            color: #ffffff;
+        }
+        .modal-body { padding: 24px; }
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 16px 24px 24px;
+            justify-content: flex-end;
+        }
+        #lightboxModal .modal-content {
+            max-width: 95vw;
+            max-height: 95vh;
+            background: rgba(0,0,0,0.95);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        #lightboxImage {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            cursor: grab;
+        }
+        #lightboxImage.grabbing { cursor: grabbing; }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #ffffff;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .lightbox-close:hover { background: var(--accent); }
+        .lightbox-zoom-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            pointer-events: none;
+        }
+        #videoModal .modal-content {
+            max-width: 900px;
+            background: #000000;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .video-actions {
+            display: flex;
+            gap: 12px;
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease-out;
+            pointer-events: all;
+            max-width: 360px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .toast.success { background: rgba(34, 197, 94, 0.9); border: 1px solid rgba(34, 197, 94, 0.5); }
+        .toast.error { background: rgba(239, 68, 68, 0.9); border: 1px solid rgba(239, 68, 68, 0.5); }
+        .toast.warning { background: rgba(234, 179, 8, 0.9); border: 1px solid rgba(234, 179, 8, 0.5); }
+        .toast.info { background: rgba(139, 92, 246, 0.9); border: 1px solid rgba(139, 92, 246, 0.5); }
+        .audio-player {
+            position: fixed;
+            bottom: calc(var(--bottom-nav-height) + 12px);
+            left: 12px;
+            right: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 200;
+            box-shadow: var(--shadow);
+        }
+        .audio-player.active { display: flex; }
+        .audio-player-info { flex: 1; min-width: 0; }
+        .audio-player-title {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .audio-player-time { font-size: 11px; color: var(--text-muted); }
+        .audio-player-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .audio-player-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .audio-player-close:hover { color: var(--text-primary); }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .admin-table th {
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+        }
+        .admin-table tr:hover td { background: var(--glass-bg); }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .bottom-nav { display: block; }
+            .main-content {
+                padding: 16px;
+                padding-bottom: calc(var(--bottom-nav-height) + 80px);
+            }
+            .page-title { font-size: 20px; }
+            .storage-meter { padding: 10px 16px; }
+            .warning-banner { font-size: 11px; padding: 8px 12px; }
+            .plans-grid { grid-template-columns: 1fr; }
+            .audio-player { bottom: calc(var(--bottom-nav-height) + 8px); }
+        }
+        @media (min-width: 769px) {
+            .bottom-nav { display: none !important; }
+            .main-content { padding-bottom: 24px; }
+        }
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mb-4 { margin-bottom: 16px; }
+        .mt-4 { margin-top: 16px; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 8px; }
+        .gap-4 { gap: 16px; }
+        .w-full { width: 100%; }
+        .text-sm { font-size: 13px; }
+        .text-xs { font-size: 11px; }
+        .text-muted { color: var(--text-muted); }
+        .font-semibold { font-weight: 600; }
+        .rounded-lg { border-radius: var(--radius-lg); }
+        .p-4 { padding: 16px; }
+        .bg-tertiary { background: var(--bg-tertiary); }
+    </style>
+</head>
+<body>
+    <div id="authModal">
+        <div class="auth-container">
+            <div class="auth-brand">
+                <h1>Azure | Nynz</h1>
+                <div class="subtitle">Storage</div>
+            </div>
+            <div class="glass-panel" style="padding: 24px;">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="App.switchAuthTab('signin')" id="tabSignIn">Sign In</button>
+                    <button class="auth-tab" onclick="App.switchAuthTab('signup')" id="tabSignUp">Sign Up</button>
+                </div>
+                <form id="signInForm" class="auth-form active" onsubmit="App.handleSignIn(event)">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="signInUsername" placeholder="Enter your username" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9]+">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-input" id="signInPassword" placeholder="Enter your password" required minlength="4">
+                    </div>
+                    <button type="submit" class="btn btn-block btn-lg" style="margin-top: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        Sign In
+                    </button>
+                </form>
+                <form id="signUpForm" class="auth-form" onsubmit="App.handleSignUp(event)">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="signUpUsername" placeholder="3-20 alphanumeric characters" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9]+">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-input" id="signUpPassword" placeholder="Minimum 4 characters" required minlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-input" id="signUpConfirmPassword" placeholder="Repeat your password" required minlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Display Name</label>
+                        <input type="text" class="form-input" id="signUpDisplayName" placeholder="Your display name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <select class="form-input" id="signUpRole" onchange="App.toggleAdminPasswordField()">
+                            <option value="guest">Guest</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Storage Name</label>
+                        <input type="text" class="form-input" id="signUpStorageName" placeholder="e.g. Azure, Nynz" required>
+                    </div>
+                    <div class="form-group hidden" id="adminPasswordGroup">
+                        <label class="form-label">Admin Panel Password</label>
+                        <input type="password" class="form-input" id="signUpAdminPassword" placeholder="Used to unlock admin panel later">
+                    </div>
+                    <button type="submit" class="btn btn-block btn-lg" style="margin-top: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                        Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="appContainer">
+        <div class="warning-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>LOCAL STORAGE — Files exist only in this browser. Clearing browser data deletes everything permanently. This is designed for personal multi-device use.</span>
+        </div>
+        <div class="storage-meter" id="storageMeter">
+            <div class="storage-meter-text">
+                <span id="storageUsedText">0 MB used</span>
+                <span id="storageLimitText">10 GB limit</span>
+            </div>
+            <div class="storage-meter-bar">
+                <div class="storage-meter-fill" id="storageMeterFill" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="app-body">
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-brand">
+                    <h2>Azure | Nynz</h2>
+                    <div class="subtitle">Storage</div>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" onclick="App.navigate('vault')" id="navVault">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        Vault
+                    </button>
+                    <button class="nav-item" onclick="App.navigate('upload')" id="navUpload">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Upload
+                    </button>
+                    <button class="nav-item" onclick="App.navigate('plans')" id="navPlans">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Plans
+                    </button>
+                    <button class="nav-item" onclick="App.navigate('settings')" id="navSettings">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Settings
+                    </button>
+                </nav>
+                <div class="sidebar-footer">
+                    <div class="user-badge">
+                        <div class="user-avatar" id="sidebarAvatar">A</div>
+                        <div class="user-info">
+                            <div class="user-name" id="sidebarUserName">Admin</div>
+                            <div class="user-role" id="sidebarUserRole">admin</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <main class="main-content" id="mainContent">
+                <div id="viewVault" class="view-section">
+                    <div class="page-header">
+                        <div>
+                            <h2 class="page-title" id="vaultTitle">My Vault</h2>
+                            <p class="text-sm text-muted" id="vaultSubtitle">Your personal storage</p>
+                        </div>
+                        <div class="vault-selector hidden" id="vaultSelectorContainer">
+                            <select class="form-input" id="vaultSelector" onchange="App.switchVault(this.value)">
+                                <option value="">My Vault</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="vaultGallery">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📂</div>
+                            <h3>Your vault is empty</h3>
+                            <p>Upload images, videos, or audio files to get started. Everything stays local.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="viewUpload" class="view-section hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Upload Files</h2>
+                    </div>
+                    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-zone-icon">☁️</div>
+                        <h3>Drop files here or click to browse</h3>
+                        <p>Supports images, videos, and audio files</p>
+                        <button class="btn" type="button">Select Files</button>
+                    </div>
+                    <input type="file" id="fileInput" class="upload-input" multiple accept="image/*,video/*,audio/*" onchange="App.handleFileSelect(event)">
+                    <div class="upload-progress hidden" id="uploadProgress"></div>
+                </div>
+                <div id="viewPlans" class="view-section hidden">
+                    <div class="page-header" style="justify-content: center;">
+                        <div class="text-center">
+                            <h2 class="page-title">Choose Your Plan</h2>
+                            <p class="text-sm text-muted" style="margin-top: 4px;">Local-first storage. No subscription required for Free tier.</p>
+                        </div>
+                    </div>
+                    <div class="plans-grid" id="plansGrid"></div>
+                </div>
+                <div id="viewSettings" class="view-section hidden">
+                    <div class="page-header">
+                        <h2 class="page-title">Settings</h2>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Appearance</h3>
+                        <div class="theme-chips" id="themeChips">
+                            <button class="theme-chip active" data-theme="dark" onclick="App.setTheme('dark')">
+                                <span class="theme-preview" style="background: #050508; border-color: #8b5cf6;"></span>
+                                🌑 Basic Dark
+                            </button>
+                            <button class="theme-chip" data-theme="monochrome" onclick="App.setTheme('monochrome')">
+                                <span class="theme-preview" style="background: #000000; border-color: #ffffff;"></span>
+                                ⚫ Monochrome
+                            </button>
+                            <button class="theme-chip" data-theme="light" onclick="App.setTheme('light')">
+                                <span class="theme-preview" style="background: #f2f2f7; border-color: #1c1c1e;"></span>
+                                ⚪ Light
+                            </button>
+                            <button class="theme-chip" data-theme="feminine" onclick="App.setTheme('feminine')">
+                                <span class="theme-preview" style="background: #1a0b14; border-color: #ff69b4;"></span>
+                                🌸 Feminine
+                            </button>
+                        </div>
+                    </div>
+                    <div class="settings-section hidden" id="adminSettingsSection">
+                        <h3>Administration</h3>
+                        <div class="glass-panel p-4 mb-4">
+                            <p class="text-sm text-muted mb-4">Access the admin panel to view and manage all user vaults on this device.</p>
+                            <button class="btn" onclick="App.showAdminPasswordModal()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                Open Admin Panel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Account</h3>
+                        <div class="glass-panel p-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="font-semibold" id="settingsUserName">User</div>
+                                    <div class="text-xs text-muted" id="settingsUserRole">Role</div>
+                                </div>
+                                <div class="user-avatar" id="settingsAvatar" style="width: 40px; height: 40px; font-size: 16px;">U</div>
+                            </div>
+                            <button class="btn btn-danger btn-block" onclick="App.logout()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                Log Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <nav class="bottom-nav" id="bottomNav">
+            <div class="bottom-nav-inner">
+                <button class="bottom-nav-item active" onclick="App.navigate('vault')" id="bottomNavVault">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    Vault
+                </button>
+                <button class="bottom-nav-item" onclick="App.navigate('upload')" id="bottomNavUpload">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload
+                </button>
+                <button class="bottom-nav-item" onclick="App.navigate('plans')" id="bottomNavPlans">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Plans
+                </button>
+                <button class="bottom-nav-item" onclick="App.navigate('settings')" id="bottomNavSettings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Settings
+                </button>
+            </div>
+        </nav>
+    </div>
+    <div class="modal-overlay" id="lightboxModal" onclick="App.closeLightbox(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="lightbox-close" onclick="App.closeLightbox()">×</button>
+            <img id="lightboxImage" src="" alt="Preview" draggable="false">
+            <div class="lightbox-zoom-hint" id="lightboxHint">Double-tap to zoom • Pinch to zoom • Drag to pan</div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="videoModal" onclick="App.closeVideoModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="videoTitle">Video</h3>
+                <button class="modal-close" onclick="App.closeVideoModal()">×</button>
+            </div>
+            <div class="video-container">
+                <video id="videoPlayer" controls playsinline></video>
+            </div>
+            <div class="video-actions">
+                <button class="btn btn-secondary" id="videoDownloadBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete File</h3>
+                <button class="modal-close" onclick="App.closeDeleteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-sm text-muted mb-2">You are about to permanently delete:</p>
+                <p class="font-semibold" id="deleteFileName" style="margin-bottom: 4px;">filename.jpg</p>
+                <p class="text-xs text-muted" id="deleteFileSize">2.4 MB</p>
+                <p class="text-sm" style="color: #ef4444; margin-top: 12px;">⚠️ This cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="App.closeDeleteModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="App.confirmDelete()">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="adminPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Admin Authentication</h3>
+                <button class="modal-close" onclick="App.closeAdminPasswordModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-sm text-muted mb-4">Enter your admin panel password to continue.</p>
+                <div class="form-group">
+                    <label class="form-label">Admin Password</label>
+                    <input type="password" class="form-input" id="adminPasswordInput" placeholder="Enter admin password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="App.closeAdminPasswordModal()">Cancel</button>
+                <button class="btn" onclick="App.verifyAdminPassword()">Unlock Panel</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="adminPanelModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3>Admin Panel — All Vaults</h3>
+                <button class="modal-close" onclick="App.closeAdminPanel()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr><th>User</th><th>Storage</th><th>Files</th><th>Used Space</th><th>Role</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="adminTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="App.closeAdminPanel()">Close</button>
+            </div>
+        </div>
+    </div>
+    <div class="audio-player" id="audioPlayer">
+        <button class="audio-player-btn" id="audioPlayBtn" onclick="App.toggleAudio()">
+            <svg id="audioPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="audioPauseIcon" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+        <div class="audio-player-info">
+            <div class="audio-player-title" id="audioPlayerTitle">Audio File</div>
+            <div class="audio-player-time" id="audioPlayerTime">0:00 / 0:00</div>
+        </div>
+        <button class="audio-player-close" onclick="App.closeAudioPlayer()">×</button>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+    <script>
+    class DB {
+        constructor() {
+            this.db = null;
+            this.DB_NAME = 'AzureNynzStorage_v1';
+            this.DB_VERSION = 1;
+        }
+        async init() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    this.db = request.result;
+                    resolve(this.db);
+                };
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains('users')) {
+                        db.createObjectStore('users', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('files')) {
+                        const filesStore = db.createObjectStore('files', { keyPath: 'id', autoIncrement: true });
+                        filesStore.createIndex('userId', 'userId', { unique: false });
+                        filesStore.createIndex('type', 'type', { unique: false });
+                        filesStore.createIndex('uploadDate', 'uploadDate', { unique: false });
+                    }
+                    if (!db.objectStoreNames.contains('settings')) {
+                        db.createObjectStore('settings', { keyPath: 'key' });
+                    }
+                };
+            });
+        }
+        async get(storeName, key) {
+            return new Promise((resolve, reject) => {
+                const tx = this.db.transaction(storeName, 'readonly');
+                const store = tx.objectStore(storeName);
+                const request = store.get(key);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        async getAll(storeName) {
+            return new Promise((resolve, reject) => {
+                const tx = this.db.transaction(storeName, 'readonly');
+                const store = tx.objectStore(storeName);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        async put(storeName, data) {
+            return new Promise((resolve, reject) => {
+                const tx = this.db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                const request = store.put(data);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        async delete(storeName, key) {
+            return new Promise((resolve, reject) => {
+                const tx = this.db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                const request = store.delete(key);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+        async getAllFromIndex(storeName, indexName, value) {
+            return new Promise((resolve, reject) => {
+                const tx = this.db.transaction(storeName, 'readonly');
+                const store = tx.objectStore(storeName);
+                const index = store.index(indexName);
+                const request = index.getAll(value);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+    }
+    const App = {
+        db: new DB(),
+        currentUser: null,
+        currentView: 'vault',
+        viewingUserId: null,
+        files: [],
+        audioElement: null,
+        currentAudioFile: null,
+        deleteTargetId: null,
+        adminVerified: false,
+        plans: {
+            free: { name: 'Free', limit: 10 * 1024 * 1024 * 1024, vaults: 1 },
+            starter: { name: 'Starter', limit: 10 * 1024 * 1024 * 1024, vaults: 1 },
+            pro: { name: 'Pro', limit: 50 * 1024 * 1024 * 1024, vaults: 2 },
+            business: { name: 'Business', limit: 200 * 1024 * 1024 * 1024, vaults: 5 },
+            ultimate: { name: 'Ultimate', limit: Infinity, vaults: Infinity }
+        },
+        async init() {
+            try {
+                await this.db.init();
+                await this.checkAuth();
+                this.setupDragDrop();
+                this.setupLightboxGestures();
+            } catch (err) {
+                console.error('Init error:', err);
+                this.showToast('Failed to initialize storage', 'error');
+            }
+        },
+        async checkAuth() {
+            try {
+                const setting = await this.db.get('settings', 'currentUserId');
+                if (setting && setting.value) {
+                    const user = await this.db.get('users', setting.value);
+                    if (user) {
+                        this.currentUser = user;
+                        this.applyTheme(user.theme || 'dark');
+                        this.hideAuthModal();
+                        this.renderApp();
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.error('Auth check error:', e);
+            }
+            this.showAuthModal();
+        },
+        showAuthModal() {
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('appContainer').classList.remove('active');
+        },
+        hideAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+        },
+        switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            if (tab === 'signin') {
+                document.getElementById('tabSignIn').classList.add('active');
+                document.getElementById('signInForm').classList.add('active');
+            } else {
+                document.getElementById('tabSignUp').classList.add('active');
+                document.getElementById('signUpForm').classList.add('active');
+            }
+        },
+        toggleAdminPasswordField() {
+            const role = document.getElementById('signUpRole').value;
+            const group = document.getElementById('adminPasswordGroup');
+            if (role === 'admin') {
+                group.classList.remove('hidden');
+                document.getElementById('signUpAdminPassword').setAttribute('required', 'required');
+            } else {
+                group.classList.add('hidden');
+                document.getElementById('signUpAdminPassword').removeAttribute('required');
+            }
+        },
+        async handleSignIn(e) {
+            e.preventDefault();
+            const username = document.getElementById('signInUsername').value.trim().toLowerCase();
+            const password = document.getElementById('signInPassword').value;
+            try {
+                const user = await this.db.get('users', username);
+                if (!user) {
+                    this.showToast('User not found', 'error');
+                    return;
+                }
+                if (user.password !== password) {
+                    this.showToast('Invalid password', 'error');
+                    return;
+                }
+                this.currentUser = user;
+                await this.db.put('settings', { key: 'currentUserId', value: user.id });
+                this.applyTheme(user.theme || 'dark');
+                this.hideAuthModal();
+                this.renderApp();
+                this.showToast(`Welcome back, ${user.displayName || user.id}!`, 'success');
+            } catch (err) {
+                console.error(err);
+                this.showToast('Sign in failed', 'error');
+            }
+        },
+        async handleSignUp(e) {
+            e.preventDefault();
+            const username = document.getElementById('signUpUsername').value.trim().toLowerCase();
+            const password = document.getElementById('signUpPassword').value;
+            const confirm = document.getElementById('signUpConfirmPassword').value;
+            const displayName = document.getElementById('signUpDisplayName').value.trim();
+            const role = document.getElementById('signUpRole').value;
+            const storageName = document.getElementById('signUpStorageName').value.trim();
+            const adminPassword = document.getElementById('signUpAdminPassword').value;
+            if (password !== confirm) {
+                this.showToast('Passwords do not match', 'error');
+                return;
+            }
+            if (!/^[a-zA-Z0-9]{3,20}$/.test(username)) {
+                this.showToast('Username must be 3-20 alphanumeric characters', 'error');
+                return;
+            }
+            try {
+                const existing = await this.db.get('users', username);
+                if (existing) {
+                    this.showToast('Username already exists. Please sign in.', 'error');
+                    return;
+                }
+                const user = {
+                    id: username,
+                    username: username,
+                    password: password,
+                    displayName: displayName || username,
+                    role: role,
+                    storageName: storageName || 'MyVault',
+                    theme: 'dark',
+                    plan: 'free',
+                    adminPassword: role === 'admin' ? adminPassword : null,
+                    createdDate: new Date().toISOString()
+                };
+                await this.db.put('users', user);
+                this.currentUser = user;
+                await this.db.put('settings', { key: 'currentUserId', value: user.id });
+                this.applyTheme('dark');
+                this.hideAuthModal();
+                this.renderApp();
+                this.showToast('Account created successfully!', 'success');
+            } catch (err) {
+                console.error(err);
+                this.showToast('Failed to create account', 'error');
+            }
+        },
+        async logout() {
+            await this.db.put('settings', { key: 'currentUserId', value: null });
+            this.currentUser = null;
+            this.viewingUserId = null;
+            this.adminVerified = false;
+            location.reload();
+        },
+        renderApp() {
+            if (!this.currentUser) return;
+            document.getElementById('sidebarUserName').textContent = this.currentUser.displayName;
+            document.getElementById('sidebarUserRole').textContent = this.currentUser.role;
+            document.getElementById('sidebarAvatar').textContent = (this.currentUser.displayName || this.currentUser.id).charAt(0).toUpperCase();
+            document.getElementById('settingsUserName').textContent = this.currentUser.displayName;
+            document.getElementById('settingsUserRole').textContent = this.currentUser.role + ' — ' + this.currentUser.plan.toUpperCase();
+            document.getElementById('settingsAvatar').textContent = (this.currentUser.displayName || this.currentUser.id).charAt(0).toUpperCase();
+            const adminSection = document.getElementById('adminSettingsSection');
+            if (this.currentUser.role === 'admin') {
+                adminSection.classList.remove('hidden');
+            } else {
+                adminSection.classList.add('hidden');
+            }
+            const vaultSelector = document.getElementById('vaultSelectorContainer');
+            if (this.currentUser.role === 'admin') {
+                vaultSelector.classList.remove('hidden');
+                this.populateVaultSelector();
+            } else {
+                vaultSelector.classList.add('hidden');
+            }
+            this.renderPlans();
+            this.loadVault();
+            this.updateStorageMeter();
+        },
+        navigate(view) {
+            this.currentView = view;
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav-item').forEach(n => n.classList.remove('active'));
+            const navMap = {
+                vault: ['navVault', 'bottomNavVault'],
+                upload: ['navUpload', 'bottomNavUpload'],
+                plans: ['navPlans', 'bottomNavPlans'],
+                settings: ['navSettings', 'bottomNavSettings']
+            };
+            (navMap[view] || []).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('active');
+            });
+            document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+            document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.remove('hidden');
+            if (view === 'vault') {
+                this.loadVault();
+            } else if (view === 'plans') {
+                this.renderPlans();
+            }
+        },
+        applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.querySelectorAll('.theme-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.theme === theme);
+            });
+        },
+        async setTheme(theme) {
+            this.applyTheme(theme);
+            if (this.currentUser) {
+                this.currentUser.theme = theme;
+                await this.db.put('users', this.currentUser);
+            }
+            this.showToast('Theme updated', 'success');
+        },
+        async loadVault() {
+            const targetUserId = this.viewingUserId || this.currentUser.id;
+            const targetUser = this.viewingUserId 
+                ? await this.db.get('users', this.viewingUserId) 
+                : this.currentUser;
+            document.getElementById('vaultTitle').textContent = this.viewingUserId 
+                ? (targetUser ? targetUser.storageName + ' (Admin View)' : 'Vault')
+                : 'My Vault';
+            document.getElementById('vaultSubtitle').textContent = this.viewingUserId
+                ? `Viewing ${targetUser ? targetUser.displayName : 'Unknown'}'s storage`
+                : 'Your personal storage';
+            try {
+                this.files = await this.db.getAllFromIndex('files', 'userId', targetUserId);
+                this.files.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+                this.renderGallery();
+                this.updateStorageMeter();
+            } catch (err) {
+                console.error('Load vault error:', err);
+                this.showToast('Failed to load vault', 'error');
+            }
+        },
+        renderGallery() {
+            const container = document.getElementById('vaultGallery');
+            if (this.files.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state animate-fadeIn">
+                        <div class="empty-state-icon">📂</div>
+                        <h3>${this.viewingUserId ? 'This vault is empty' : 'Your vault is empty'}</h3>
+                        <p>${this.viewingUserId ? 'No files found in this user\'s storage.' : 'Upload images, videos, or audio files to get started. Everything stays local.'}</p>
+                    </div>
+                `;
+                return;
+            }
+            let html = '<div class="masonry-grid">';
+            this.files.forEach(file => {
+                const isAudio = file.type.startsWith('audio/');
+                const isVideo = file.type.startsWith('video/');
+                const sizeStr = this.formatBytes(file.size);
+                let src = '';
+                if (file.thumbnail) {
+                    src = this.arrayBufferToDataURL(file.thumbnail, file.type);
+                } else if (file.data) {
+                    src = this.arrayBufferToDataURL(file.data, file.type);
+                }
+                html += `
+                    <div class="masonry-item animate-fadeInUp" data-id="${file.id}">
+                        ${isAudio 
+                            ? `<div class="audio-thumbnail" onclick="App.playAudio(${file.id})">🎵</div>`
+                            : isVideo
+                                ? `<video src="${src}" preload="metadata" onclick="App.openVideo(${file.id})" style="cursor:pointer;"></video>`
+                                : `<img src="${src}" alt="${file.name}" loading="lazy" onclick="App.openLightbox(${file.id})" style="cursor:zoom-in;">`
+                        }
+                        <div class="file-overlay">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-meta">${sizeStr} • ${new Date(file.uploadDate).toLocaleDateString()}</div>
+                            <div class="file-actions">
+                                <button class="file-action-btn" onclick="event.stopPropagation(); App.downloadFile(${file.id})" title="Download">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button class="file-action-btn" onclick="event.stopPropagation(); App.promptDelete(${file.id})" title="Delete">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+            this.setupLazyLoad();
+        },
+        setupLazyLoad() {
+            const images = document.querySelectorAll('.masonry-item img[data-src]');
+            if (!images.length) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        observer.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '50px' });
+            images.forEach(img => observer.observe(img));
+        },
+        setupDragDrop() {
+            const zone = document.getElementById('uploadZone');
+            if (!zone) return;
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                zone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+            zone.addEventListener('dragenter', () => zone.classList.add('dragover'));
+            zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+            zone.addEventListener('drop', (e) => {
+                zone.classList.remove('dragover');
+                this.processFiles(e.dataTransfer.files);
+            });
+        },
+        handleFileSelect(e) {
+            this.processFiles(e.target.files);
+            e.target.value = '';
+        },
+        async processFiles(fileList) {
+            const files = Array.from(fileList);
+            if (!files.length) return;
+            const currentUsage = await this.getStorageUsage();
+            const planLimit = this.plans[this.currentUser.plan]?.limit || this.plans.free.limit;
+            const totalNewSize = files.reduce((sum, f) => sum + f.size, 0);
+            if (planLimit !== Infinity && (currentUsage + totalNewSize) > planLimit) {
+                this.showToast('Storage limit exceeded. Delete files or upgrade plan.', 'error');
+                return;
+            }
+            const progressContainer = document.getElementById('uploadProgress');
+            progressContainer.classList.remove('hidden');
+            for (const file of files) {
+                const progressId = 'progress-' + Math.random().toString(36).substr(2, 9);
+                progressContainer.innerHTML += `
+                    <div class="upload-progress-item" id="${progressId}">
+                        <span class="text-sm" style="flex-shrink:0; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${file.name}</span>
+                        <div class="upload-progress-bar"><div class="upload-progress-fill" style="width:0%"></div></div>
+                        <span class="text-xs text-muted" style="flex-shrink:0;">Processing...</span>
+                    </div>
+                `;
+                try {
+                    await this.processAndStoreFile(file, progressId);
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    if (err.name === 'QuotaExceededError') {
+                        this.showToast('Storage full. Delete files or upgrade plan.', 'error');
+                    } else {
+                        this.showToast(`Failed to upload ${file.name}`, 'error');
+                    }
+                    document.getElementById(progressId)?.remove();
+                }
+            }
+            setTimeout(() => {
+                progressContainer.innerHTML = '';
+                progressContainer.classList.add('hidden');
+            }, 2000);
+            this.loadVault();
+            this.showToast('Upload complete!', 'success');
+        },
+        async processAndStoreFile(file, progressId) {
+            const progressItem = document.getElementById(progressId);
+            const updateProgress = (pct, msg) => {
+                if (!progressItem) return;
+                const fill = progressItem.querySelector('.upload-progress-fill');
+                const label = progressItem.querySelector('.text-xs');
+                if (fill) fill.style.width = pct + '%';
+                if (label) label.textContent = msg;
+            };
+            updateProgress(10, 'Reading...');
+            let dataBuffer = await file.arrayBuffer();
+            let thumbnailBuffer = null;
+            let duration = null;
+            if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
+                updateProgress(30, 'Compressing...');
+                try {
+                    const compressed = await this.compressImage(dataBuffer, file.type);
+                    dataBuffer = compressed;
+                } catch (e) {
+                    console.warn('Compression failed, storing original', e);
+                }
+            }
+            if (file.type.startsWith('video/')) {
+                updateProgress(40, 'Generating thumbnail...');
+                try {
+                    thumbnailBuffer = await this.generateVideoThumbnail(dataBuffer, file.type);
+                } catch (e) {
+                    console.warn('Thumbnail generation failed', e);
+                }
+            }
+            updateProgress(80, 'Storing...');
+            const fileRecord = {
+                userId: this.currentUser.id,
+                storageName: this.currentUser.storageName,
+                name: file.name,
+                type: file.type,
+                size: dataBuffer.byteLength,
+                data: dataBuffer,
+                thumbnail: thumbnailBuffer,
+                duration: duration,
+                uploadDate: new Date().toISOString()
+            };
+            await this.db.put('files', fileRecord);
+            updateProgress(100, 'Done');
+        },
+        compressImage(arrayBuffer, mimeType) {
+            return new Promise((resolve, reject) => {
+                const blob = new Blob([arrayBuffer], { type: mimeType });
+                const img = new Image();
+                const url = URL.createObjectURL(blob);
+                img.onload = () => {
+                    URL.revokeObjectURL(url);
+                    const maxDim = 1920;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round(h * maxDim / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round(w * maxDim / h);
+                            h = maxDim;
+                        }
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            reject(new Error('Canvas toBlob failed'));
+                            return;
+                        }
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsArrayBuffer(blob);
+                    }, 'image/jpeg', 0.8);
+                };
+                img.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Image load failed'));
+                };
+                img.src = url;
+            });
+        },
+        generateVideoThumbnail(arrayBuffer, mimeType) {
+            return new Promise((resolve, reject) => {
+                const blob = new Blob([arrayBuffer], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const video = document.createElement('video');
+                video.onloadedmetadata = () => {
+                    video.currentTime = Math.min(1, video.duration / 2);
+                };
+                video.onseeked = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth > 640 ? 640 : video.videoWidth;
+                    canvas.height = (canvas.width / video.videoWidth) * video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(url);
+                    canvas.toBlob((blob) => {
+                        if (!blob) { reject(new Error('Canvas toBlob failed')); return; }
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsArrayBuffer(blob);
+                    }, 'image/jpeg', 0.7);
+                };
+                video.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Video load failed'));
+                };
+                video.src = url;
+                video.load();
+            });
+        },
+        openLightbox(fileId) {
+            const file = this.files.find(f => f.id === fileId);
+            if (!file || !file.data) return;
+            const img = document.getElementById('lightboxImage');
+            img.src = this.arrayBufferToDataURL(file.data, file.type);
+            img.style.transform = 'scale(1) translate(0px, 0px)';
+            this.lightboxScale = 1;
+            this.lightboxTranslateX = 0;
+            this.lightboxTranslateY = 0;
+            document.getElementById('lightboxModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+        closeLightbox(e) {
+            if (e && e.target !== e.currentTarget && e.target.id !== 'lightboxImage') return;
+            document.getElementById('lightboxModal').classList.remove('active');
+            document.body.style.overflow = '';
+            const img = document.getElementById('lightboxImage');
+            img.src = '';
+        },
+        setupLightboxGestures() {
+            const img = document.getElementById('lightboxImage');
+            let lastDist = 0;
+            let startX = 0, startY = 0;
+            let isDragging = false;
+            let lastTap = 0;
+            img.addEventListener('click', (e) => {
+                const now = Date.now();
+                if (now - lastTap < 300) {
+                    e.preventDefault();
+                    if (this.lightboxScale > 1) {
+                        this.lightboxScale = 1;
+                        this.lightboxTranslateX = 0;
+                        this.lightboxTranslateY = 0;
+                    } else {
+                        this.lightboxScale = 3;
+                    }
+                    this.updateLightboxTransform();
+                }
+                lastTap = now;
+            });
+            const container = document.querySelector('#lightboxModal .modal-content');
+            container.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    lastDist = Math.hypot(
+                        e.touches[0].pageX - e.touches[1].pageX,
+                        e.touches[0].pageY - e.touches[1].pageY
+                    );
+                } else if (e.touches.length === 1 && this.lightboxScale > 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX - this.lightboxTranslateX;
+                    startY = e.touches[0].clientY - this.lightboxTranslateY;
+                    img.classList.add('grabbing');
+                }
+            }, { passive: true });
+            container.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const dist = Math.hypot(
+                        e.touches[0].pageX - e.touches[1].pageX,
+                        e.touches[0].pageY - e.touches[1].pageY
+                    );
+                    const delta = dist - lastDist;
+                    this.lightboxScale = Math.max(1, Math.min(5, this.lightboxScale + delta * 0.005));
+                    this.updateLightboxTransform();
+                    lastDist = dist;
+                } else if (isDragging && this.lightboxScale > 1) {
+                    e.preventDefault();
+                    this.lightboxTranslateX = e.touches[0].clientX - startX;
+                    this.lightboxTranslateY = e.touches[0].clientY - startY;
+                    this.updateLightboxTransform();
+                }
+            }, { passive: false });
+            container.addEventListener('touchend', () => {
+                isDragging = false;
+                img.classList.remove('grabbing');
+            });
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                this.lightboxScale = Math.max(1, Math.min(5, this.lightboxScale + delta));
+                this.updateLightboxTransform();
+            }, { passive: false });
+            let mouseDown = false;
+            container.addEventListener('mousedown', (e) => {
+                if (this.lightboxScale > 1) {
+                    mouseDown = true;
+                    startX = e.clientX - this.lightboxTranslateX;
+                    startY = e.clientY - this.lightboxTranslateY;
+                    img.classList.add('grabbing');
+                }
+            });
+            container.addEventListener('mousemove', (e) => {
+                if (mouseDown && this.lightboxScale > 1) {
+                    this.lightboxTranslateX = e.clientX - startX;
+                    this.lightboxTranslateY = e.clientY - startY;
+                    this.updateLightboxTransform();
+                }
+            });
+            container.addEventListener('mouseup', () => {
+                mouseDown = false;
+                img.classList.remove('grabbing');
+            });
+        },
+        updateLightboxTransform() {
+            const img = document.getElementById('lightboxImage');
+            img.style.transform = `scale(${this.lightboxScale}) translate(${this.lightboxTranslateX}px, ${this.lightboxTranslateY}px)`;
+        },
+        openVideo(fileId) {
+            const file = this.files.find(f => f.id === fileId);
+            if (!file || !file.data) return;
+            document.getElementById('videoTitle').textContent = file.name;
+            const video = document.getElementById('videoPlayer');
+            video.src = this.arrayBufferToDataURL(file.data, file.type);
+            const downloadBtn = document.getElementById('videoDownloadBtn');
+            downloadBtn.onclick = () => this.downloadFile(fileId);
+            document.getElementById('videoModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            video.play().catch(() => {});
+        },
+        closeVideoModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            const video = document.getElementById('videoPlayer');
+            video.pause();
+            video.src = '';
+            document.getElementById('videoModal').classList.remove('active');
+            document.body.style.overflow = '';
+        },
+        playAudio(fileId) {
+            const file = this.files.find(f => f.id === fileId);
+            if (!file || !file.data) return;
+            if (this.audioElement) {
+                this.audioElement.pause();
+                this.audioElement.src = '';
+            }
+            this.currentAudioFile = fileId;
+            const player = document.getElementById('audioPlayer');
+            const title = document.getElementById('audioPlayerTitle');
+            const time = document.getElementById('audioPlayerTime');
+            title.textContent = file.name;
+            player.classList.add('active');
+            this.audioElement = new Audio(this.arrayBufferToDataURL(file.data, file.type));
+            this.audioElement.play().catch(err => {
+                console.error('Audio play error:', err);
+                this.showToast('Could not play audio', 'error');
+            });
+            this.updateAudioPlayButton(true);
+            this.audioElement.ontimeupdate = () => {
+                const cur = this.formatTime(this.audioElement.currentTime);
+                const dur = this.formatTime(this.audioElement.duration || 0);
+                time.textContent = `${cur} / ${dur}`;
+            };
+            this.audioElement.onended = () => {
+                this.updateAudioPlayButton(false);
+            };
+        },
+        toggleAudio() {
+            if (!this.audioElement) return;
+            if (this.audioElement.paused) {
+                this.audioElement.play();
+                this.updateAudioPlayButton(true);
+            } else {
+                this.audioElement.pause();
+                this.updateAudioPlayButton(false);
+            }
+        },
+        updateAudioPlayButton(playing) {
+            document.getElementById('audioPlayIcon').classList.toggle('hidden', playing);
+            document.getElementById('audioPauseIcon').classList.toggle('hidden', !playing);
+        },
+        closeAudioPlayer() {
+            if (this.audioElement) {
+                this.audioElement.pause();
+                this.audioElement.src = '';
+                this.audioElement = null;
+            }
+            document.getElementById('audioPlayer').classList.remove('active');
+        },
+        async downloadFile(fileId) {
+            const file = this.files.find(f => f.id === fileId);
+            if (!file || !file.data) return;
+            const blob = new Blob([file.data], { type: file.type });
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const ext = file.name.split('.').pop();
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: file.name,
+                        types: [{
+                            description: file.type,
+                            accept: { [file.type]: ['.' + ext] }
+                        }]
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                    this.showToast('File saved successfully', 'success');
+                    return;
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.warn('File System Access API failed, falling back', err);
+                    }
+                }
+            }
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            this.showToast('Download started', 'success');
+        },
+        promptDelete(fileId) {
+            const file = this.files.find(f => f.id === fileId);
+            if (!file) return;
+            this.deleteTargetId = fileId;
+            document.getElementById('deleteFileName').textContent = file.name;
+            document.getElementById('deleteFileSize').textContent = this.formatBytes(file.size);
+            document.getElementById('deleteModal').classList.add('active');
+        },
+        closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            this.deleteTargetId = null;
+        },
+        async confirmDelete() {
+            if (!this.deleteTargetId) return;
+            try {
+                await this.db.delete('files', this.deleteTargetId);
+                this.showToast('File deleted permanently', 'warning');
+                this.closeDeleteModal();
+                this.loadVault();
+            } catch (err) {
+                console.error('Delete error:', err);
+                this.showToast('Failed to delete file', 'error');
+            }
+        },
+        showAdminPasswordModal() {
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminPasswordModal').classList.add('active');
+        },
+        closeAdminPasswordModal() {
+            document.getElementById('adminPasswordModal').classList.remove('active');
+        },
+        verifyAdminPassword() {
+            const input = document.getElementById('adminPasswordInput').value;
+            if (input === this.currentUser.adminPassword) {
+                this.adminVerified = true;
+                this.closeAdminPasswordModal();
+                this.showAdminPanel();
+            } else {
+                this.showToast('Incorrect admin password', 'error');
+            }
+        },
+        async showAdminPanel() {
+            if (this.currentUser.role !== 'admin' || !this.adminVerified) {
+                this.showToast('Unauthorized', 'error');
+                return;
+            }
+            const allUsers = await this.db.getAll('users');
+            const tbody = document.getElementById('adminTableBody');
+            tbody.innerHTML = '';
+            for (const user of allUsers) {
+                if (user.id === this.currentUser.id) continue;
+                const userFiles = await this.db.getAllFromIndex('files', 'userId', user.id);
+                const fileCount = userFiles.length;
+                const usedSpace = userFiles.reduce((sum, f) => sum + (f.size || 0), 0);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${user.displayName}</strong><br><span class="text-xs text-muted">@${user.id}</span></td>
+                    <td>${user.storageName}</td>
+                    <td>${fileCount}</td>
+                    <td>${this.formatBytes(usedSpace)}</td>
+                    <td><span style="text-transform:capitalize; font-size:11px; padding:2px 8px; border-radius:4px; background:var(--bg-tertiary);">${user.role}</span></td>
+                    <td><button class="btn btn-sm" onclick="App.viewUserVault('${user.id}')">👁 View</button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+            if (allUsers.length <= 1) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted" style="padding:24px;">No other users found on this device.</td></tr>';
+            }
+            document.getElementById('adminPanelModal').classList.add('active');
+        },
+        closeAdminPanel() {
+            document.getElementById('adminPanelModal').classList.remove('active');
+        },
+        async viewUserVault(userId) {
+            this.viewingUserId = userId;
+            this.closeAdminPanel();
+            this.navigate('vault');
+            this.showToast('Switched to user vault (Admin View)', 'info');
+        },
+        async populateVaultSelector() {
+            const selector = document.getElementById('vaultSelector');
+            selector.innerHTML = '<option value="">My Vault</option>';
+            if (this.currentUser.role !== 'admin') return;
+            const allUsers = await this.db.getAll('users');
+            for (const user of allUsers) {
+                if (user.id === this.currentUser.id) continue;
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.storageName} (${user.displayName})`;
+                selector.appendChild(option);
+            }
+            selector.value = this.viewingUserId || '';
+        },
+        switchVault(userId) {
+            this.viewingUserId = userId || null;
+            this.loadVault();
+        },
+        renderPlans() {
+            const container = document.getElementById('plansGrid');
+            if (!container) return;
+            const plans = [
+                {
+                    name: 'Free',
+                    price: 'Rp 0',
+                    period: '',
+                    featured: false,
+                    features: [
+                        '10 GB storage',
+                        '1 Vault',
+                        'Basic Themes only (Dark, Monochrome, Light, Feminine)',
+                        'Standard image compression',
+                        'Local browser storage only',
+                        'Basic history'
+                    ],
+                    disabled: []
+                },
+                {
+                    name: 'Starter',
+                    price: 'Rp 10.000',
+                    period: '/ month',
+                    featured: false,
+                    features: [
+                        '10 GB storage',
+                        '1 Vault',
+                        'Basic Themes',
+                        'Standard compression',
+                        '30-Day activity history',
+                        'Download/Restore to gallery',
+                        'No Admin Panel'
+                    ],
+                    disabled: [6]
+                },
+                {
+                    name: 'Pro',
+                    price: 'Rp 30.000',
+                    period: '/ month',
+                    featured: true,
+                    badge: 'BEST VALUE',
+                    features: [
+                        '50 GB storage',
+                        '2 Vaults (Admin + Guest mode)',
+                        'ALL Premium Themes + future themes',
+                        'Smart Compression (auto-resize >2MB, quality 0.8)',
+                        'Video thumbnail generation',
+                        'Admin Panel Access (view other vaults)',
+                        'Unlimited history',
+                        'Priority UI animations'
+                    ],
+                    disabled: []
+                },
+                {
+                    name: 'Business',
+                    price: 'Rp 65.000',
+                    period: '/ month',
+                    featured: false,
+                    features: [
+                        '200 GB storage',
+                        '5 Vaults (Team mode)',
+                        'AI Auto-Tagging (placeholder)',
+                        'Cloud Export Ready (placeholder)',
+                        'Batch Upload (multiple files)',
+                        'Unlimited history',
+                        'Custom branding placeholder'
+                    ],
+                    disabled: [2, 3, 6]
+                },
+                {
+                    name: 'Ultimate',
+                    price: 'Rp 100.000',
+                    period: ' one-time',
+                    featured: false,
+                    features: [
+                        'Unlimited storage',
+                        'Unlimited vaults',
+                        'Advanced encryption placeholder',
+                        'Biometric Lock Ready placeholder',
+                        'Lifetime free updates',
+                        'White-label branding placeholder'
+                    ],
+                    disabled: [2, 3, 5]
+                }
+            ];
+            container.innerHTML = plans.map(plan => `
+                <div class="plan-card ${plan.featured ? 'featured' : ''} animate-fadeInUp">
+                    ${plan.badge ? `<div class="plan-badge">${plan.badge}</div>` : ''}
+                    <div class="plan-name">${plan.name}</div>
+                    <div class="plan-price">${plan.price}<span>${plan.period}</span></div>
+                    <ul class="plan-features">
+                        ${plan.features.map((feat, i) => `
+                            <li class="${plan.disabled && plan.disabled.includes(i) ? 'disabled' : ''}">${feat}</li>
+                        `).join('')}
+                    </ul>
+                    <button class="btn btn-block" onclick="App.selectPlan('${plan.name}')">Select Plan</button>
+                </div>
+            `).join('');
+        },
+        selectPlan(planName) {
+            this.showToast('Payment gateway coming soon — this is a local demo.', 'info');
+        },
+        async getStorageUsage() {
+            const targetId = this.viewingUserId || this.currentUser?.id;
+            if (!targetId) return 0;
+            const files = await this.db.getAllFromIndex('files', 'userId', targetId);
+            return files.reduce((sum, f) => sum + (f.size || 0), 0);
+        },
+        async updateStorageMeter() {
+            if (!this.currentUser) return;
+            const used = await this.getStorageUsage();
+            const plan = this.plans[this.currentUser.plan] || this.plans.free;
+            const limit = plan.limit;
+            const usedStr = this.formatBytes(used);
+            const limitStr = limit === Infinity ? 'Unlimited' : this.formatBytes(limit);
+            document.getElementById('storageUsedText').textContent = usedStr + ' used';
+            document.getElementById('storageLimitText').textContent = limitStr + ' limit';
+            if (limit !== Infinity) {
+                const pct = Math.min(100, (used / limit) * 100);
+                const fill = document.getElementById('storageMeterFill');
+                fill.style.width = pct + '%';
+                fill.classList.remove('warning', 'danger');
+                if (pct > 90) {
+                    fill.classList.add('danger');
+                    if (pct > 95) this.showToast('Storage critically full! Delete files or upgrade.', 'warning');
+                } else if (pct > 75) {
+                    fill.classList.add('warning');
+                }
+            } else {
+                document.getElementById('storageMeterFill').style.width = '0%';
+            }
+        },
+        arrayBufferToDataURL(buffer, type) {
+            const blob = new Blob([buffer], { type });
+            return URL.createObjectURL(blob);
+        },
+        formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        },
+        formatTime(seconds) {
+            if (!isFinite(seconds)) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        },
+        showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠',
+                info: 'ℹ'
+            };
+            toast.innerHTML = `<span style="font-weight:700;">${icons[type] || '•'}</span> ${message}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+        App.init();
+    });
+    </script>
+</body>
+</html>
         /* Animasi background bergerak */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
